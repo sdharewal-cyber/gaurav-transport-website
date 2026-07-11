@@ -318,6 +318,9 @@ footer{background:#0a1a0e;border-top:3px solid var(--gold)}
 
 .track-card-body{padding:28px 30px 30px}
 label.track-lbl{font-size:11px;font-weight:700;color:var(--green2);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:9px}
+.track-branch-row{margin-bottom:20px}
+select.track-select{width:100%;font-size:15px;padding:13px 14px;border:1.5px solid var(--border);border-radius:9px;font-family:'Inter',sans-serif;background:var(--light);color:#0d2115;font-weight:600;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232D6A4F' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:16px}
+select.track-select:focus{outline:none;border-color:var(--green2);background-color:#fff}
 .track-input-row{display:flex;gap:10px}
 .track-input-wrap{flex:1;position:relative}
 .track-input-row input{width:100%;font-size:17px;padding:13px 14px;border:1.5px solid var(--border);border-radius:9px;font-family:'Inter',sans-serif;background:var(--light);color:#0d2115;letter-spacing:1px;font-weight:600}
@@ -326,6 +329,8 @@ label.track-lbl{font-size:11px;font-weight:700;color:var(--green2);letter-spacin
 .track-input-row button:hover{background:var(--green3)}
 .track-input-row button:disabled{opacity:.6;cursor:default}
 .track-hint{font-size:12px;color:var(--gray);margin-top:11px}
+.track-testing-note{margin-top:16px;background:#fff8e6;border:1px solid #f0d98c;border-radius:10px;padding:13px 15px;font-size:12.5px;color:#7a5c00;line-height:1.55;display:flex;gap:9px;align-items:flex-start}
+.track-testing-note span.ttn-ico{flex-shrink:0;font-size:14px;line-height:1.4}
 #trackResult{margin-top:8px}
 
 /* result panel */
@@ -919,6 +924,14 @@ body.loading{ overflow:hidden; }
           <div class="track-live-badge">Live</div>
         </div>
         <div class="track-card-body">
+          <div class="track-branch-row">
+            <label class="track-lbl" for="branch">Departed From</label>
+            <select id="branch" class="track-select">
+              <option value="KTM">Kathmandu</option>
+              <option value="BRT">Biratnagar</option>
+              <option value="BTL">Butwal</option>
+            </select>
+          </div>
           <label class="track-lbl" for="cnno">Cn No (Bilty No)</label>
           <div class="track-input-row">
             <div class="track-input-wrap">
@@ -927,6 +940,7 @@ body.loading{ overflow:hidden; }
             <button id="trackBtn" onclick="trackShipment()">Track →</button>
           </div>
           <div class="track-hint">This number is printed on your bilty receipt.</div>
+          <div class="track-testing-note"><span class="ttn-ico">🚧</span><span>This tracking system is currently in testing phase. We've started with our Kathmandu branch only for now — Biratnagar and Butwal tracking will be rolled out soon.</span></div>
           <div id="trackResult"></div>
         </div>
       </div>
@@ -1543,7 +1557,7 @@ async function handleApply(btn){
 
 
 /* ── LIVE SHIPMENT TRACKING ── */
-const TRACK_API_URL = "https://script.google.com/macros/s/AKfycbx1Ef6VS8PMnWGwjIe-JnxEikuvjT7W7ymtkurJcNpGuuohUQaitBOzgBcGlBiC8Z0/exec";
+const TRACK_API_URL = "https://script.google.com/macros/s/AKfycbwJtE74IesjAaP9gZr8_nmGYN_IKeWEjAsKC3ohRKp4l3RJUmPyw0KgnMgncf-CJOk/exec";
 
 document.addEventListener('DOMContentLoaded', function(){
   const cnnoInput = document.getElementById('cnno');
@@ -1601,14 +1615,24 @@ function buildTimeline(status){
   return html;
 }
 
+const BRANCH_LABELS = { KTM: 'Kathmandu', BRT: 'Biratnagar', BTL: 'Butwal' };
+const LIVE_BRANCHES = ['KTM']; // update this list as more branches go live
+
 async function trackShipment(){
   const input = document.getElementById('cnno');
+  const branchSel = document.getElementById('branch');
   const btn = document.getElementById('trackBtn');
   const box = document.getElementById('trackResult');
   const cnno = input.value.trim();
+  const branch = branchSel.value;
 
   if(!cnno){
     box.innerHTML = '<div class="track-error">Please enter your Cn No.</div>';
+    return;
+  }
+
+  if(!LIVE_BRANCHES.includes(branch)){
+    box.innerHTML = '<div class="track-error">Online tracking for ' + BRANCH_LABELS[branch] + ' branch is coming soon.<br>Please select Kathmandu for now, or contact your booking branch directly.</div>';
     return;
   }
 
@@ -1617,7 +1641,7 @@ async function trackShipment(){
   box.innerHTML = '<div class="track-loading">Checking your bilty…</div>';
 
   try{
-    const res = await fetch(TRACK_API_URL + '?cnno=' + encodeURIComponent(cnno));
+    const res = await fetch(TRACK_API_URL + '?cnno=' + encodeURIComponent(cnno) + '&branch=' + encodeURIComponent(branch));
     const data = await res.json();
 
     if(!data.found){
