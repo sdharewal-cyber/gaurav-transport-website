@@ -95,6 +95,8 @@ p.ss{font-size:15px;color:#4a6b52;max-width:580px;line-height:1.8}
 .btn-hero:hover{background:var(--green3);transform:translateY(-2px)}
 .btn-hero-out{background:transparent;border:1.5px solid rgba(255,255,255,.42);color:#fff;padding:14px 30px;border-radius:9px;font-weight:600;font-size:15px;cursor:pointer;transition:all .2s}
 .btn-hero-out:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+.btn-hero-track{background:var(--gold2);border:1px solid var(--gold2);color:#0d2115;padding:14px 30px;border-radius:9px;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:9px}
+.btn-hero-track:hover{background:#fff;border-color:#fff;transform:translateY(-2px)}
 .hero-stats{display:flex;gap:32px;flex-wrap:wrap}
 .hstat{border-left:3px solid var(--gold);padding-left:14px}
 .hstat-n{font-size:28px;font-weight:800;color:var(--gold2)}
@@ -760,6 +762,7 @@ body.loading{ overflow:hidden; }
         <p>From Mechi to Mahakali — we move cargo reliably across every corner of Nepal with 50+ trucks and 10+ offices nationwide.</p>
         <div class="hero-btns">
           <div class="btn-hero" onclick="goTo('contact')">Get a Free Quote</div>
+          <div class="btn-hero-track" onclick="goTo('track')"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>Track Shipment</div>
           <div class="btn-hero-out" onclick="goTo('services')">Our Services →</div>
         </div>
         <div class="hero-stats">
