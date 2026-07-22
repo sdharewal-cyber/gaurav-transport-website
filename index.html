@@ -926,7 +926,7 @@ body.loading{ overflow:hidden; }
             <button id="trackBtn" onclick="trackShipment()">Track →</button>
           </div>
           <div class="track-hint">This number is printed on your bilty receipt.</div>
-          <div class="track-testing-note"><span class="ttn-ico">🚧</span><span>This tracking system is currently in testing phase. We've started with our Kathmandu branch only for now — Biratnagar and Butwal tracking will be rolled out soon.</span></div>
+          <div class="track-testing-note"><span class="ttn-ico">🚧</span><span>This tracking system is currently in testing phase. Kathmandu and Biratnagar are live for now — Butwal tracking will be rolled out soon.</span></div>
           <div id="trackResult"></div>
         </div>
       </div>
@@ -1602,7 +1602,7 @@ function buildTimeline(status){
 }
 
 const BRANCH_LABELS = { KTM: 'Kathmandu', BRT: 'Biratnagar', BTL: 'Butwal' };
-const LIVE_BRANCHES = ['KTM']; // update this list as more branches go live
+const LIVE_BRANCHES = ['KTM', 'BRT']; // update this list as more branches go live
 
 async function trackShipment(){
   const input = document.getElementById('cnno');
